@@ -40,7 +40,7 @@ RUN set -x \
         glu \
         gperf \
         pcre \
-        qt \
+        qt-x11 \
         xvfb \
     && apk --no-cache add --virtual .builddeps \
         autoconf \
