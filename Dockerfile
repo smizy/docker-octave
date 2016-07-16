@@ -18,8 +18,7 @@ RUN set -x \
         gnuplot \
         hdf5 \
  #       lapack \
-        openblas \        
- #       x11vnc \
+        openblas \ 
     && apk --no-cache add --virtual .builddeps.edge \
         --repository http://dl-cdn.alpinelinux.org/alpine/edge/testing/ \
  #       arpack-dev \
@@ -38,7 +37,7 @@ RUN set -x \
         gperf \
         pcre \
         qt-x11 \
- #       xvfb \
+        xvfb \
     && apk --no-cache add --virtual .builddeps \
         autoconf \
         automake \
