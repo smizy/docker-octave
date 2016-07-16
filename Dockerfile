@@ -3,9 +3,6 @@ MAINTAINER smizy
 
 ENV OCTAVE_VERSION  4.0.3
 
-# ENV JAVA_HOME   /usr/lib/jvm/default-jvm
-# ENV PATH        $PATH:${JAVA_HOME}/bin
-
 RUN set -x \
     && apk update \
     && apk --no-cache add \
@@ -22,7 +19,7 @@ RUN set -x \
         hdf5 \
  #       lapack \
         openblas \        
-        x11vnc \
+ #       x11vnc \
     && apk --no-cache add --virtual .builddeps.edge \
         --repository http://dl-cdn.alpinelinux.org/alpine/edge/testing/ \
  #       arpack-dev \
@@ -41,7 +38,7 @@ RUN set -x \
         gperf \
         pcre \
         qt-x11 \
-        xvfb \
+ #       xvfb \
     && apk --no-cache add --virtual .builddeps \
         autoconf \
         automake \
@@ -76,5 +73,44 @@ RUN set -x \
     && adduser -D  -g '' -s /sbin/nologin octave \
     && mkdir -p /code 
 
+
+# install conda/jupyter
+ENV CONDA_DIR=/opt/conda CONDA_VER=4.0.5
+ENV PATH=$CONDA_DIR/bin:$PATH SHELL=/bin/bash LC_ALL=C LANG=C.UTF-8
+
+RUN set -x \
+    && curl -L "https://github.com/andyshinn/alpine-pkg-glibc/releases/download/2.23-r1/glibc-2.23-r1.apk" -o /tmp/glibc.apk \
+    && curl -L "https://github.com/andyshinn/alpine-pkg-glibc/releases/download/2.23-r1/glibc-bin-2.23-r1.apk" -o /tmp/glibc-bin.apk \
+    && curl -L "https://github.com/andyshinn/alpine-pkg-glibc/releases/download/2.23-r1/glibc-i18n-2.23-r1.apk" -o /tmp/glibc-i18n.apk \
+    && apk add --allow-untrusted /tmp/glibc*.apk \
+    && /usr/glibc-compat/sbin/ldconfig /lib /usr/glibc-compat/lib \
+    && /usr/glibc-compat/bin/localedef -i en_US -f UTF-8 C.UTF-8 \
+    && rm -rf /tmp/glibc*apk /var/cache/apk/* \
+    && mkdir -p $CONDA_DIR \
+    && curl https://repo.continuum.io/miniconda/Miniconda3-${CONDA_VER}-Linux-x86_64.sh  -o mconda.sh \
+    && /bin/bash mconda.sh -f -b -p $CONDA_DIR \
+    && rm mconda.sh \
+    && conda install --yes \
+        ipywidgets \
+        'notebook=4.0*' \
+        terminado \
+    && pip install pip --upgrade \
+    && pip install octave_kernel \
+    && pip install jupyter-console \
+    && python -m octave_kernel.install \
+    && conda clean --yes --tarballs --packages --source-cache \     
+    && find /opt -name __pycache__ | xargs rm -r \
+    && rm -rf \
+        /opt/conda/pkgs/* \
+        /root/.[acpw]* \
+    && apk --no-cache add tini 
+
 WORKDIR /code
-    
+
+COPY entrypoint.sh  /usr/local/bin/
+COPY jupyter_notebook_config.py ./
+
+EXPOSE 8888
+
+ENTRYPOINT ["tini", "--", "entrypoint.sh"]
+CMD ["jupyter", "notebook"]
