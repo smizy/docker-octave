@@ -35,6 +35,7 @@ RUN set -x \
         ghostscript \
         glu \
         gperf \
+        less \
         pcre \
         qt-x11 \
         xvfb \
@@ -102,7 +103,8 @@ RUN set -x \
     && rm -rf \
         /opt/conda/pkgs/* \
         /root/.[acpw]* \
-    && apk --no-cache add tini 
+    && apk --no-cache add \
+        tini 
 
 WORKDIR /code
 
