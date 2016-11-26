@@ -3,4 +3,4 @@
 *.ipynb
 *.png
 octave-workspace
-ex1/
+.vscode
