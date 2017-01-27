@@ -4,10 +4,10 @@ Octave + Jupyter Notebook docker image based on alpine
 
 ```
 # run jupyter
-docker run  -p 8888:8888 -v $(pwd):/code  -d smizy/octave:4.0.3-jupyter-alpine
+docker run -it --rm -p 8888:8888 -v $(pwd):/code  smizy/octave:4.2.0-alpine
 
-# open browser
-open http://$(docker-machine ip default):8888
+# open browser (see token in log)
+open http://$(docker-machine ip default):8888?token=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
 # create a notebook selecting "Octave" from [New] pulldown  
 

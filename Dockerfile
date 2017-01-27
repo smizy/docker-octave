@@ -1,27 +1,22 @@
-FROM alpine:3.4
+FROM alpine:3.5
 MAINTAINER smizy
 
-ENV OCTAVE_VERSION  4.0.3
+ENV OCTAVE_VERSION  4.2.0
 
 RUN set -x \
     && apk update \
     && apk --no-cache add \
         bash \
+        fltk \
         ghostscript \
+        gnuplot \
+        lapack \
         less \
         python3 \
+        py3-zmq \
         su-exec \ 
         tini \
         xvfb \
-    && apk --no-cache add  \
-        --repository http://dl-cdn.alpinelinux.org/alpine/edge/community/ \
-#        font-noto \
-        gnuplot \
-        lapack \
-        py3-zmq \
-    && apk --no-cache add  \
-        --repository http://dl-cdn.alpinelinux.org/alpine/edge/main/ \
-        fltk \
     && apk --no-cache add \
         --repository http://dl-cdn.alpinelinux.org/alpine/edge/testing/ \
         octave \
@@ -45,5 +40,5 @@ COPY jupyter_notebook_config.py /etc/jupyter/
 
 EXPOSE 8888
 
-ENTRYPOINT ["tini", "--", "entrypoint.sh"]
+ENTRYPOINT ["/sbin/tini", "--", "entrypoint.sh"]
 CMD ["jupyter", "notebook"]
