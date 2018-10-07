@@ -79,7 +79,7 @@ jobs:
             # TAG_MINOR=${VERSION%.*}-alpine
             # TAG_MAJOR=${VERSION%%.*}-alpine 
 
-            if [ "${CIRCLE_BRANCH}" == "4.2.0-r2" ]; then
+            if [ "${CIRCLE_BRANCH}" == "master" ]; then
               docker login -u $DOCKER_USER -p $DOCKER_PASS
               docker image tag smizy/octave:${TAG} smizy/octave
               # docker image tag smizy/octave:${TAG} smizy/octave:${TAG_MINOR}
