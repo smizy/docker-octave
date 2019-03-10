@@ -39,6 +39,7 @@ RUN set -x \
         python3 \
         py3-zmq \
         su-exec \ 
+        texinfo \
         tini \
         xvfb \
     && pip3 install --upgrade pip \
