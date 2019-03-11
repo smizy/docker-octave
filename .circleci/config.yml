@@ -8,7 +8,7 @@ jobs:
 
     environment:
       VERSION: "4.2.0"
-      TAG: "4.2.0-r2-alpine"
+      TAG: "4.2.0-r3-alpine"
       BUILD_NUMBER: "1"
       # TAG: ${VERSION}-alpine
       # TAG_MINOR: ${VERSION%.*}-alpine
